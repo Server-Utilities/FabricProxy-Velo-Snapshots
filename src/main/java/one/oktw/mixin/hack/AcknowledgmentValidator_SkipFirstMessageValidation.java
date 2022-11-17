@@ -15,14 +15,14 @@ import java.util.Set;
 public class AcknowledgmentValidator_SkipFirstMessageValidation {
     private boolean firstMessage = true;
 
-    @Redirect(method = "validate", at = @At(value = "INVOKE", target = "Ljava/util/EnumSet;add(Ljava/lang/Object;)Z"))
-    private boolean allowUnknownMessage(EnumSet<AcknowledgmentValidator.FailureReason> instance, Object o) {
-        if (firstMessage && o == AcknowledgmentValidator.FailureReason.UNKNOWN_MESSAGES) return false;
-        return instance.add((AcknowledgmentValidator.FailureReason) o);
-    }
+//    @Redirect(method = "validate", at = @At(value = "INVOKE", target = "Ljava/util/EnumSet;add(Ljava/lang/Object;)Z"))
+//    private boolean allowUnknownMessage(EnumSet<AcknowledgmentValidator.FailureReason> instance, Object o) {
+//        if (firstMessage && o == AcknowledgmentValidator.FailureReason.UNKNOWN_MESSAGES) return false;
+//        return instance.add((AcknowledgmentValidator.FailureReason) o);
+//    }
 
     @Inject(method = "validate", at = @At("RETURN"))
-    private void firstMessageSanded(LastSeenMessageList.Acknowledgment acknowledgment, CallbackInfoReturnable<Set<AcknowledgmentValidator.FailureReason>> cir) {
+    private void firstMessageSanded(LastSeenMessageList.Acknowledgment acknowledgment, CallbackInfoReturnable<Set<LastSeenMessageList.Acknowledgment>> cir) {
         firstMessage = false;
     }
 }

@@ -57,19 +57,19 @@ class PacketHandler {
 
             // Public key
             boolean keyEnforce = server.shouldEnforceSecureProfile();
-            Optional<PlayerPublicKey.PublicKeyData> publicKey = Optional.empty();
+//            Optional<PlayerPublicKey.PublicKeyData> publicKey = Optional.empty();
             Optional<UUID> profileId = Optional.empty();
             try {
                 // Ignore v1 KEY, it not work on 1.19.1+
                 if (forwardVersion >= VelocityLib.MODERN_FORWARDING_WITH_KEY_V2) {
-                    publicKey = VelocityLib.readKey(buf);
+//                    publicKey = VelocityLib.readKey(buf);
                     profileId = VelocityLib.readUuid(buf);
                 }
 
-                if (keyEnforce && publicKey.isEmpty()) {
-                    handler.disconnect(Text.translatable("multiplayer.disconnect.missing_public_key"));
-                    return;
-                }
+//                if (keyEnforce && publicKey.isEmpty()) {
+//                    handler.disconnect(Text.translatable("multiplayer.disconnect.missing_public_key"));
+//                    return;
+//                }
             } catch (Exception e) {
                 LogManager.getLogger().error("Public key read failed.", e);
                 if (keyEnforce) {
@@ -79,11 +79,11 @@ class PacketHandler {
             }
 
             if (config.getHackEarlySend()) {
-                handler.onHello(new LoginHelloC2SPacket(profile.getName(), publicKey, profileId.or(() ->Optional.of(profile.getId()))));
+                handler.onHello(new LoginHelloC2SPacket(profile.getName(), profileId.or(() ->Optional.of(profile.getId()))));
             }
 
             ((ServerLoginNetworkHandler_ProfileAccessor) handler).setProfile(profile);
-            publicKey.ifPresent(((ServerLoginNetworkHandler_ProfileAccessor) handler)::setPublicKeyData);
+//            publicKey.ifPresent(((ServerLoginNetworkHandler_ProfileAccessor) handler)::setPublicKeyData);
             profileId.ifPresent(((IServerLoginNetworkHandler_RealUUID) handler)::setRealUUID);
         }));
     }
